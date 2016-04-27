@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>exchange.IO</title>
+</head>
+<body>
+<script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>	
+<script type="text/javascript" src="/js/socket.io.js"></script>
+<script>
+	var io = io.connect('localhost:8000');
+	io.on('connect', function() {
+		console.log('connected to exchange...');
+		io.emit('message', 'hi');
+	});
+
+	io.on('message', function(msg) {
+		console.log('got message:', msg);
+	});
+</script>
+<input type="text"></input><input type="button" value="send"></input>
+</body>
+</html>
