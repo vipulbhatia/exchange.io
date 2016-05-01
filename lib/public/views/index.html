@@ -7,15 +7,25 @@
 <script type="text/javascript" src="/js/socket.io.js"></script>
 <script>
 	var io = io.connect('localhost:8000');
+	var message = "";
 	io.on('connect', function() {
 		console.log('connected to exchange...');
-		io.emit('message', 'hi');
 	});
 
 	io.on('message', function(msg) {
 		console.log('got message:', msg);
+		$('#chat').val($('#chat').val() + '\n' + msg);
 	});
+
+$(document).ready(function() {	
+	$('#send').click(function() {
+		message = $('#message').val();
+		$('#chat').val($('#chat').val() + '\n' + message);
+		io.emit('message', message);
+	});
+});
 </script>
-<input type="text"></input><input type="button" value="send"></input>
+<input type="text" id="message"></input><input type="button" value="send" id="send"></input><br/><br/>
+<textarea id="chat" style="width:500px;height:100%"></textarea>
 </body>
 </html>
