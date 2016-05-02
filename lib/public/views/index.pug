@@ -1,0 +1,31 @@
+doctype html
+html
+	head
+		title exchange.IO
+		script(src="https://code.jquery.com/jquery-2.2.3.min.js", integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=", crossorigin="anonymous")
+		script(src="/js/socket.io.js")
+		script.
+			var io = io.connect('localhost:8000');
+			var message = "";
+			io.on('connect', function() {
+				console.log('connected to exchange...');
+				io.emit('message', 'join room #{room}');
+			});
+
+			io.on('message', function(msg) {
+				console.log('got message:', msg);
+				$('#chat').val($('#chat').val() + '\n' + msg);
+			});
+
+			$(document).ready(function() {	
+				$('#send').click(function() {
+					message = $('#message').val();
+					$('#chat').val($('#chat').val() + '\n' + message);
+					io.emit('message', message);
+				});
+			});
+	body
+		input(type="text", id="message")
+		input(type="button", value="send", id="send")
+		br
+		textarea(id="chat", style="width:500px;height:500px")
