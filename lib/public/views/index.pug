@@ -5,10 +5,11 @@ html
 		script(src="https://code.jquery.com/jquery-2.2.3.min.js", integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=", crossorigin="anonymous")
 		script(src="/js/socket.io.js")
 		script.
-			var io = io.connect('localhost:8000');
+			var io = io.connect('#{master}:8000');
 			var message = "";
 			io.on('connect', function() {
 				console.log('connected to exchange...');
+				io.emit('message', 'set response-type JSON');
 				io.emit('message', 'join room #{room}');
 			});
 
@@ -17,7 +18,7 @@ html
 				$('#chat').val($('#chat').val() + '\n' + msg);
 			});
 
-			$(document).ready(function() {	
+			$(document).ready(function() {
 				$('#send').click(function() {
 					message = $('#message').val();
 					$('#chat').val($('#chat').val() + '\n' + message);
