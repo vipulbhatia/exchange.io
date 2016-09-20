@@ -3,7 +3,9 @@ html
 	head
 		title exchange.IO
 		script(src="https://code.jquery.com/jquery-2.2.3.min.js", integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=", crossorigin="anonymous")
+		script(src="js/hterm_all.js")
 		script(src="/js/socket.io.js")
+		script(src="js/wetty.js")
 		script.
 			var io = io.connect('#{master}:8000');
 			var message = "";
@@ -15,7 +17,8 @@ html
 
 			io.on('message', function(msg) {
 				console.log('got message:', msg);
-				$('#chat').val($('#chat').val() + '\n' + msg);
+				msg = JSON.parse(msg);
+				$('#chat').val($('#chat').val() + '\n' + msg.sender + ': ' + msg.message);
 			});
 
 			$(document).ready(function() {
@@ -25,8 +28,10 @@ html
 					io.emit('message', message);
 				});
 			});
+
 	body
 		input(type="text", id="message")
 		input(type="button", value="send", id="send")
 		br
 		textarea(id="chat", style="width:500px;height:500px")
+		div(id="terminal", style="float:right;width:1200px;height:500px")
